@@ -1,0 +1,90 @@
+[
+    {
+        "id": 1,
+        "nombre": "Tarta Clásica",
+        "descripcion": "Base de galleta y queso crema puro.",
+        "precio": "22.50",
+        "imagen": "img/tarta_clasica.png",
+        "categoria": "clasica"
+    },
+    {
+        "id": 2,
+        "nombre": "Tarta de Pistacho",
+        "descripcion": "Crema artesanal de pistacho 100%.",
+        "precio": "26.00",
+        "imagen": "img/tarta_pistacho.png",
+        "categoria": "clasica"
+    },
+    {
+        "id": 3,
+        "nombre": "Tarta Dulce de Loto",
+        "descripcion": "Con crema y galletas de loto belga.",
+        "precio": "24.50",
+        "imagen": "img/tarta_lotus.png",
+        "categoria": "clasica"
+    },
+    {
+        "id": 4,
+        "nombre": "Tarta de Arándanos",
+        "descripcion": "Cobertura de mermelada natural de arándanos.",
+        "precio": "23.00",
+        "imagen": "img/tarta_arandanos.png",
+        "categoria": "clasica"
+    },
+    {
+        "id": 5,
+        "nombre": "Tarta de Oreo",
+        "descripcion": "Base y trozos de galleta Oreo.",
+        "precio": "25.00",
+        "imagen": "img/tarta_oreo.png",
+        "categoria": "clasica"
+    },
+    {
+        "id": 6,
+        "nombre": "Tarta Clásica Sin Gluten",
+        "descripcion": "Nuestra receta tradicional adaptada con base de almendra molida. 100% libre de gluten certificado.",
+        "precio": "25.50",
+        "imagen": "img/clasica_sin_gluten.png",
+        "categoria": "sin_gluten"
+    },
+    {
+        "id": 7,
+        "nombre": "Tarta de Frambuesa Sin Gluten",
+        "descripcion": "Cremosa con cobertura de frambuesa natural. Base de avena certificada sin gluten.",
+        "precio": "27.00",
+        "imagen": "img/frambuesa_sin_gluten.png",
+        "categoria": "sin_gluten"
+    },
+    {
+        "id": 8,
+        "nombre": "Tarta de Limón Sin Gluten",
+        "descripcion": "Refrescante crema de limón sobre base de coco rallado y dátiles. Sin trigo ni derivados.",
+        "precio": "26.50",
+        "imagen": "img/limon_sin_gluten.png",
+        "categoria": "sin_gluten"
+    },
+    {
+        "id": 9,
+        "nombre": "Tarta Clásica Sin Azúcar",
+        "descripcion": "Elaborada con eritritol natural. Mismo sabor cremoso, sin azúcares añadidos. Apta para diabéticos.",
+        "precio": "26.00",
+        "imagen": "img/clasica_sin_azucar.png",
+        "categoria": "sin_azucar"
+    },
+    {
+        "id": 10,
+        "nombre": "Tarta de Frutos Rojos Sin Azúcar",
+        "descripcion": "Mezcla de fresas, arándanos y frambuesas frescas. Endulzada con stevia. Sin azúcar añadido.",
+        "precio": "27.50",
+        "imagen": "img/frutos_rojos_sin_azucar.png",
+        "categoria": "sin_azucar"
+    },
+    {
+        "id": 11,
+        "nombre": "Tarta de Vainilla Sin Azúcar",
+        "descripcion": "Vainilla de Madagascar con base de nuez. Endulzada con eritritol. Índice glucémico muy bajo.",
+        "precio": "25.50",
+        "imagen": "img/vainilla_sin_azucar.png",
+        "categoria": "sin_azucar"
+    }
+]

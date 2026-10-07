@@ -1,0 +1,51 @@
+/*VARIABLES GLOBALES*/
+
+/*Definicion de colores y fuentes para todo el ecosistema web*/
+:root {
+    --color-primario: #d35400;
+    --color-secundario: #e67e22;
+    --color-fondo: #fcf9f2;
+    --color-fondo-seccion: #ffffff;
+    --color-texto: #333333;
+    --color-borde: #e0d5c1;
+    --color-footer: #2c3e50;
+    --fuente-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transicion: all 0.3s ease;
+}
+
+/*MODO OSCURO*/
+
+/*Sobrescribe las variables de color cuando se activa este modo*/
+[data-theme="dark"] {
+    --color-fondo: #1a1a1a;
+    --color-fondo-seccion: #2d2d2d;
+    --color-texto: #f5f5f5;
+    --color-borde: #404040;
+    --color-footer: #111111;
+}
+
+/*MODO DALTONICO*/
+
+/*Sustituye los tonos naranjas por azules para mejorar el contraste*/
+[data-daltonico="true"] {
+    --color-primario: #0056b3;
+    --color-secundario: #007bff;
+}
+/* BOTON CALCULADORA: color de texto adaptado a cada modo */
+
+.btn-calculadora-carta {
+    background: var(--color-primario);
+    color: white;
+}
+
+[data-theme="dark"] .btn-calculadora-carta {
+    color: #000000;
+}
+
+[data-daltonico="true"] .btn-calculadora-carta {
+    color: #000000;
+}
+
+[data-daltonico="true"] .boton-primario {
+    color: #000000;
+}

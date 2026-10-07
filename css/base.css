@@ -1,0 +1,83 @@
+/*RESETEO DEL NAVEGADOR*/
+
+/*Elimina margenes por defecto y asegura el tamaño real de las cajas*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*ESTILOS DEL CUERPO*/
+
+/*Configuracion flexbox para empujar siempre el pie de pagina abajo*/
+html, body {
+    font-family: var(--fuente-principal);
+    line-height: 1.6;
+    color: var(--color-texto);
+    background-color: var(--color-fondo);
+    transition: var(--transicion);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/*CONTENEDOR PRINCIPAL*/
+
+/*Limita el ancho de la pagina y la centra en monitores grandes*/
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+/*BOTONES GENERICOS*/
+
+/*Estructura base para todos los enlaces y botones de accion*/
+.boton {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: var(--transicion);
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/*BOTON PRINCIPAL*/
+
+/*Aplica la paleta de colores corporativa al boton*/
+.boton-primario {
+    background-color: var(--color-primario);
+    color: var(--color-fondo-seccion);
+}
+
+/*EFECTO HOVER*/
+
+/*Eleva el boton ligeramente al pasar el raton por encima*/
+.boton-primario:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/*CONTROL DE VISIBILIDAD*/
+
+/*Clase utilizada por Javascript para ocultar modulos de la web*/
+.seccion-oculta {
+    display: none;
+}
+
+/*TITULOS DE SECCION*/
+
+/*Formato estandar para los encabezados principales de cada pagina*/
+.titulo-seccion {
+    text-align: center;
+    margin: 3rem 0 2rem;
+    color: var(--color-primario);
+    font-size: 2.5rem;
+}

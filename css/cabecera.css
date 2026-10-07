@@ -1,0 +1,365 @@
+/*CABECERA PRINCIPAL*/
+
+/*Mantiene la barra superior fija al hacer scroll en la pagina*/
+header {
+    background-color: var(--color-fondo-seccion);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: var(--transicion);
+}
+
+/*BARRA DE NAVEGACION*/
+
+/*Fila única: logo | menú central | acciones derecha*/
+.barra-navegacion {
+    padding: 0 1.5rem;
+    height: 65px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+/*CAJA DEL LOGOTIPO*/
+
+.logotipo {
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+}
+
+/*IMAGEN DEL LOGOTIPO*/
+
+.logo-img {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    display: block;
+}
+
+/*MENU CENTRAL*/
+
+/*Lista horizontal centrada que ocupa el espacio disponible*/
+.menu-navegacion {
+    display: flex;
+    list-style: none;
+    gap: 1.8rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+}
+
+/*ENLACES DEL MENU*/
+
+.menu-navegacion a {
+    color: var(--color-texto);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transicion);
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.menu-navegacion a:hover {
+    color: var(--color-primario);
+}
+
+/*ACCIONES DE LA DERECHA*/
+
+.acciones-navegacion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/*SEPARADOR VISUAL ENTRE GRUPOS*/
+
+.acciones-navegacion .separador-nav {
+    width: 1px;
+    height: 28px;
+    background-color: var(--color-borde);
+    margin: 0 0.3rem;
+}
+
+/*BOTONES DE ICONO CIRCULAR*/
+
+.btn-tema {
+    background: none;
+    border: 2px solid var(--color-primario);
+    color: var(--color-primario);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: var(--transicion);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.btn-tema:hover {
+    background-color: var(--color-primario);
+    color: #fff;
+}
+
+/*DROPDOWN DE ACCESO*/
+
+.dropdown-acceso {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.dropdown-contenido {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    background-color: var(--color-fondo-seccion);
+    min-width: 170px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    z-index: 1001;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-borde);
+}
+
+.dropdown-contenido a {
+    color: var(--color-texto);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    transition: var(--transicion);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.dropdown-contenido a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-contenido a:hover {
+    background-color: var(--color-borde);
+    color: var(--color-primario);
+}
+
+.dropdown-contenido.mostrar-dropdown {
+    display: block;
+}
+
+/*CONTROLES DE USUARIO AUTENTICADO*/
+
+#controles-usuario {
+    display: none;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+#etiqueta-estado-usuario {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    white-space: nowrap;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#btn-panel-admin {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    white-space: nowrap;
+}
+
+/*PUNTOS DEL USUARIO*/
+
+#puntos-usuario {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-primario);
+    white-space: nowrap;
+    padding: 0 0.3rem;
+}
+
+/*CAJA DEL CARRITO*/
+
+.contenedor-carrito-icono {
+    position: relative;
+    cursor: pointer;
+    color: var(--color-primario);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    padding: 0 0.2rem;
+    transition: var(--transicion);
+    flex-shrink: 0;
+}
+
+.contenedor-carrito-icono:hover {
+    color: var(--color-secundario);
+    transform: scale(1.1);
+}
+
+/*BURBUJA DEL CARRITO*/
+
+.badge-carrito {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: var(--color-primario);
+    color: white;
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*ADAPTACION TABLET*/
+
+@media (max-width: 1024px) {
+    .menu-navegacion {
+        gap: 1.1rem;
+    }
+    .menu-navegacion a {
+        font-size: 0.88rem;
+    }
+}
+
+/*ADAPTACION MOVILES*/
+
+@media (max-width: 768px) {
+    .barra-navegacion {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 0.6rem 0.75rem;
+        gap: 0.4rem;
+    }
+
+    /* Fila 1: logo + carrito (alineados en los extremos) */
+    .logotipo {
+        order: 1;
+        flex: 1;
+    }
+    .contenedor-carrito-icono {
+        order: 2;
+        position: static;
+        flex-shrink: 0;
+    }
+
+    /* Fila 2: menú de navegación centrado */
+    .menu-navegacion {
+        order: 3;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem 1rem;
+    }
+
+    .menu-navegacion a {
+        font-size: 0.85rem;
+    }
+
+    /* Fila 3: acciones (botones de config + cuenta + puntos) */
+    .acciones-navegacion {
+        order: 4;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem;
+        padding-bottom: 0.3rem;
+    }
+
+    /* Ocultar separadores visuales en móvil */
+    .separador-nav {
+        display: none;
+    }
+
+    /* Reducir tamaño botones de icono */
+    .btn-tema {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    /* Reducir botón Mi Cuenta */
+    .dropdown-acceso .boton {
+        font-size: 0.82rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    /* Puntos más compactos */
+    #puntos-usuario {
+        font-size: 0.78rem;
+    }
+
+    /* Botones usuario autenticado */
+    #controles-usuario .boton {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+    }
+
+    #etiqueta-estado-usuario {
+        max-width: 100px;
+    }
+}
+
+/*ADAPTACION MÓVILES PEQUEÑOS — iPhone SE, Samsung S8+ */
+
+@media (max-width: 390px) {
+    .barra-navegacion {
+        padding: 0.5rem 0.6rem;
+        gap: 0.3rem;
+    }
+
+    .logo-img {
+        height: 38px;
+    }
+
+    .menu-navegacion {
+        gap: 0.3rem 0.7rem;
+    }
+
+    .menu-navegacion a {
+        font-size: 0.8rem;
+    }
+
+    .btn-tema {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .dropdown-acceso .boton {
+        font-size: 0.78rem;
+        padding: 0.35rem 0.65rem;
+    }
+
+    #etiqueta-estado-usuario {
+        max-width: 80px;
+        font-size: 0.75rem;
+    }
+
+    #puntos-usuario {
+        font-size: 0.72rem;
+    }
+}

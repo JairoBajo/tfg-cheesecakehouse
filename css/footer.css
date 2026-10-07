@@ -1,0 +1,81 @@
+/* PIE DE PAGINA */
+
+/* Define el bloque de anclaje terminal del documento estabilizando la jerarquia visual. */
+.site-footer {
+    background-color: var(--color-footer);
+    color: #ffffff;
+    padding: 3rem 0 0 0;
+    font-family: var(--fuente-principal);
+}
+
+/* SECCIONES DE FOOTER */
+
+/* Distribuye las zonas de navegacion inferior mediante cuadricula relacional modular secundaria. */
+.footer-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 20px 2rem 20px;
+}
+
+/* TITULOS DE COLUMNAS */
+
+/* Asigna factor de realce secundario para fragmentar categoricamente listados aglomerantes bajos. */
+.footer-columna h3 {
+    color: var(--color-secundario);
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+/* PARRAFOS DE PIE */
+
+/* Modula la densidad de color tipografica mitigando stress visual sobre el fondo subyacente. */
+.footer-columna p {
+    color: #cccccc;
+    line-height: 1.6;
+}
+
+/* FORMATO DE LISTAS */
+
+/* Purga elementos decorativos nativos inicializando comportamiento no-estandar de listas. */
+.footer-columna ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* ITEMS DE LISTA */
+
+/* Induce parametro espaciador lineal facilitando indexacion e iteracion tactil humana. */
+.footer-columna ul li {
+    margin-bottom: 0.8rem;
+}
+
+/* ENLACES NORMALES */
+
+/* Resetea la directiva visual de hipervinculo estableciendo cimientos para estados re-interactivos. */
+.footer-columna ul li a {
+    color: #cccccc;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+/* COLOR AL APUNTAR */
+
+/* Implementa mutacion cromatica sobre vector CSS ante activacion temporal via pseudo-clase hover. */
+.footer-columna ul li a:hover {
+    color: var(--color-secundario);
+}
+
+/* ZONA DE COPYRIGHT */
+
+/* Fija la contencion tipografica referencial absolutizando el tono perimetral. */
+.footer-bottom {
+    background-color: #111111;
+    text-align: center;
+    padding: 1.5rem 0;
+    color: #888888;
+    font-size: 0.9rem;
+}

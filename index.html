@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheeseCakeHouse - Inicio</title>
+    
+    <link rel="icon" href="data:,">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* TITULO BIENVENIDOS: aparece al entrar y desvanece */
+        #hero-bienvenidos {
+            opacity: 1;
+            transition: opacity 1.5s ease;
+        }
+        #hero-bienvenidos.oculto {
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* FRASE TAGLINE */
+        .hero-tagline {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.5rem;
+            font-style: italic;
+            font-weight: 400;
+            color: #fff;
+            text-shadow: 1px 2px 8px rgba(0,0,0,0.7);
+            margin-bottom: 2rem;
+            letter-spacing: 0.03em;
+            line-height: 1.5;
+        }
+
+        /* LOGO MAS GRANDE */
+        .logo-img {
+            height: 72px !important;
+            width: auto;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .logo-img {
+                height: 52px !important;
+            }
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+            #hero-bienvenidos {
+                font-size: 2rem !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/cabecera.css">
+    <link rel="stylesheet" href="css/carrusel.css">
+    <link rel="stylesheet" href="css/secciones.css">
+    <link rel="stylesheet" href="css/footer.css">
+    
+    <!-- Leaflet CSS y JS para el mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+
+    <div id="popup-promo" class="popup-promo" style="display: none;">
+        <span class="cerrar-popup" onclick="document.getElementById('popup-promo').style.display='none'"><i class="fas fa-times"></i></span>
+        <h4 data-i18n="promo-titulo">¡Oferta de Bienvenida!</h4>
+        <p data-i18n="promo-desc">Regístrate ahora y obtén un <strong>10% de descuento</strong> automático en tu primera tarta.</p>
+        <a onclick="document.getElementById('popup-promo').style.display='none'; gestorNavegacion.irA('registro');" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 0.8rem; cursor: pointer; color: white; font-weight: bold; text-decoration: underline; font-size: 1rem;">
+            Regístrate aquí <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <audio id="audio-carrito" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
+
+    <header>
+        <div class="contenedor barra-navegacion">
+            
+            <div class="logotipo" onclick="gestorNavegacion.irA('inicio')">
+                <img src="img/logo.png" alt="Logo CheeseCakeHouse" class="logo-img">
+            </div>
+            
+            <ul class="menu-navegacion">
+                <li><a onclick="gestorNavegacion.irA('inicio')" data-i18n="nav-inicio">Inicio</a></li>
+                <li><a onclick="gestorNavegacion.irA('carta')" data-i18n="nav-carta">Carta</a></li>
+                <li><a onclick="gestorNavegacion.irA('creador')" data-i18n="nav-creador">Crear Tarta</a></li>
+                <li><a onclick="gestorNavegacion.irA('nosotros')" data-i18n="nav-nosotros">Sobre Nosotros</a></li>
+                <li><a onclick="gestorNavegacion.irA('contacto')" data-i18n="nav-contacto">Contacto</a></li>
+            </ul>
+
+            <div class="acciones-navegacion">
+                <!-- Botones de configuración -->
+                <button id="btn-idioma" class="btn-tema" title="Cambiar Idioma">
+                    <img id="icono-bandera" src="https://flagcdn.com/w40/us.png" alt="Idioma" style="width: 22px; border-radius: 3px;">
+                </button>
+                <button id="btn-daltonico" class="btn-tema" title="Modo Daltónicos"><i class="fas fa-eye" id="icono-daltonico"></i></button>
+                <button id="btn-tema" class="btn-tema" title="Alternar Modo Oscuro/Claro"><i class="fas fa-moon" id="icono-tema"></i></button>
+
+                <div class="separador-nav"></div>
+
+                <!-- Acceso (no autenticado) -->
+                <div class="dropdown-acceso" id="menu-acceso">
+                    <button class="boton boton-primario" onclick="gestorNavegacion.alternarMenuAcceso(event)">
+                        <i class="fas fa-user"></i>&nbsp;<span data-i18n="nav-cuenta">Mi Cuenta</span> <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div id="dropdown-acceso-contenido" class="dropdown-contenido">
+                        <a onclick="gestorNavegacion.irA('login'); gestorNavegacion.cerrarMenuAcceso();" data-i18n="nav-iniciar">Iniciar Sesión</a>
+                        <a onclick="gestorNavegacion.irA('registro'); gestorNavegacion.cerrarMenuAcceso();" data-i18n="nav-registro">Registrarse</a>
+                    </div>
+                </div>
+
+                <!-- Controles usuario autenticado -->
+                <div id="controles-usuario" style="display: none; align-items: center; gap: 0.4rem;">
+                    <button class="boton boton-primario" onclick="gestorNavegacion.irA('perfil')" id="etiqueta-estado-usuario">Mi Perfil</button>
+                    <button class="boton boton-primario" id="btn-panel-admin" onclick="gestorNavegacion.irA('admin')" style="display:none; background-color: #dc3545;">Admin</button>
+                    <button class="boton" onclick="gestorAutenticacion.cerrarSesion()" style="background-color: #6c757d; color: white;" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+
+                <div class="separador-nav"></div>
+
+                <!-- Puntos y carrito -->
+                <div id="puntos-usuario"></div>
+                <div class="contenedor-carrito-icono" onclick="gestorNavegacion.irA('carrito')">
+                    <i class="fas fa-shopping-cart icono-carrito"></i>
+                    <span id="contador-carrito" class="badge-carrito">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor">
+        
+        <section id="pantalla_inicio" class="vista-activa">
+            <div class="seccion-hero" style="background-color: #000;">
+                <img id="img-fondo-blur" src="img/tarta_clasica.png" class="video-fondo-blur" aria-hidden="true">
+                <img id="img-fondo-hero" src="img/tarta_clasica.png" class="video-fondo" style="transition: opacity 1s ease-in-out; object-position: center;">
+                <div class="contenido-hero">
+                    <h2 id="hero-bienvenidos" data-i18n="hero-titulo" style="font-size: 3.5rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Bienvenidos a CheeseCakeHouse</h2>
+                    <h3 id="texto-slideshow" data-i18n="tag-clasica" style="margin-bottom: 1.5rem; font-size: 2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); font-weight: normal;">Receta Tradicional</h3>
+                    <p class="hero-tagline" data-i18n="hero-tagline">Las mejores tartas a domicilio a un clic en CheeseCake House</p>
+                    <button class="boton boton-primario" onclick="gestorNavegacion.irA('carta')" style="font-size: 1.3rem; padding: 15px 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);" data-i18n="btn-ver-carta">Ver Carta</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_carta" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="carta-titulo">Nuestra Carta Artesanal</h2>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem;">
+                <button id="btn-sorpresa" class="boton boton-primario" onclick="gestorSorpresa.activar()" style="font-size:1rem; padding:0.7rem 1.5rem;" data-i18n="btn-sorpresa">🎲 ¡Sorpréndeme!</button>
+                <button class="boton btn-calculadora-carta" onclick="gestorCalculadora.abrir()" style="font-size:1rem; padding:0.7rem 1.5rem;" data-i18n="btn-calculadora">🍰 Calculadora de porciones</button>
+            </div>
+            <div id="contenedor-productos" style="width:100%;"></div>
+        </section>
+
+        <section id="pantalla_creador" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="creador-titulo">Personaliza tu Tarta</h2>
+            <div class="caja-texto" style="max-width: 800px; margin: 0 auto;">
+                <p id="creador-desc-texto" data-i18n="creador-texto" style="margin-bottom: 2rem; font-weight: bold; color: var(--color-primario);">Crea tu propia tarta personalizada desde cero. La base incluye galleta y crema de queso fresco. Selecciona entre 1 y 3 complementos extra para darle tu toque especial. El primer complemento es totalmente gratuito. Cada complemento adicional sumará 0,50€ al precio base de la tarta.</p>
+                <div id="opcionesExtras" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;"></div>
+                <hr style="border: 0; border-top: 1px solid var(--color-borde); margin: 2rem 0;">
+                <div style="text-align: right; margin-top: 2.5rem;">
+                    <h3 style="margin-bottom: 1rem;"><span data-i18n="creador-total">Total a pagar:</span> <span id="precioCalculado">20.00</span>€</h3>
+                    <button class="boton boton-primario" onclick="gestorCreador.añadirAlCarrito()" style="margin-top: 1.5rem;" data-i18n="btn-añadir-carrito">Añadir al Carrito</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_nosotros" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="nosotros-titulo">Sobre Nosotros</h2>
+            
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <button class="boton boton-primario" onclick="mostrarSubMenuNosotros('empresa')" style="margin-right: 15px; padding: 10px 30px;" data-i18n="tab-empresa">La Empresa</button>
+                <button class="boton boton-primario" onclick="mostrarSubMenuNosotros('legal')" style="background-color: #6c757d; padding: 10px 30px;" data-i18n="tab-legal">Información Legal</button>
+            </div>
+
+            <div id="nosotros-empresa" style="display: block;">
+                <div style="text-align: center; margin-bottom: 4rem; padding: 0 1rem;">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1.5rem; font-size: 2rem;"><i class="fas fa-book-open"></i> <span data-i18n="historia-titulo">Nuestra Historia</span></h3>
+                    <img src="img/CheeseCakeHouse.jpg" alt="Nuestra Historia" style="width: 100%; max-width: 800px; height: 400px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); margin-bottom: 1.5rem;">
+                    <p style="font-size: 1.1rem; line-height: 1.8; color: var(--color-texto); max-width: 800px; margin: 0 auto;" data-i18n="historia-texto">Fundada en <strong>2020</strong>, CheeseCakeHouse nació de una pasión inquebrantable por la repostería artesanal. Lo que comenzó como un pequeño obrador familiar en Torrelavega se ha convertido en un referente de calidad y sabor. Nuestro objetivo siempre ha sido encontrar el equilibrio perfecto entre las <span style="font-style: italic;">recetas tradicionales</span> y las texturas más innovadoras.</p>
+                </div>
+                
+                <div style="display: flex; flex-direction: row; align-items: center; gap: 2rem; margin-bottom: 4rem; text-align: left; padding: 0 1rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="color: #6c757d; margin-bottom: 1.5rem; font-size: 1.8rem;"><i class="fas fa-blender"></i> <span data-i18n="obrador-titulo">Producción y Obrador</span></h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--color-texto);" data-i18n="obrador-texto">Cada una de nuestras tartas se elabora <strong>a mano</strong>, diariamente, en nuestro obrador central. No utilizamos procesos industriales ni conservantes artificiales. Seleccionamos rigurosamente cada ingrediente: desde el queso crema de granjas locales hasta los pistachos ibéricos más selectos y las mermeladas ecológicas.</p>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=800" alt="Obrador" style="width: 100%; height: 350px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: row-reverse; align-items: center; gap: 2rem; margin-bottom: 4rem; text-align: right; padding: 0 1rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="color: var(--color-secundario); margin-bottom: 1.5rem; font-size: 1.8rem;"><i class="fas fa-box"></i> <span data-i18n="envios-titulo">Gestión de Envíos y Empaquetado</span></h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--color-texto);" data-i18n="envios-texto">Entendemos que una tarta es a menudo el centro de una celebración. Por ello, hemos diseñado un sistema de empaquetado <strong>isotérmico</strong> que mantiene la cadena de frío y protege la estructura del postre durante el transporte. Trabajamos con empresas logísticas especializadas, garantizando entregas en <span style="text-decoration: underline;">menos de 24 horas</span>.</p>
+                        <div style="margin-top: 1.5rem; background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 6px; padding: 1rem 1.5rem;">
+                            <p style="font-size: 1rem; line-height: 1.7; color: var(--color-texto); margin: 0;">
+                                <strong><i class="fas fa-exclamation-triangle" style="color: #f9a825;"></i> <span data-i18n="envios-canarias-titulo">Envíos a Canarias:</span></strong> <span data-i18n="envios-canarias-texto">Realizamos envíos a todo el territorio nacional, incluidas las Islas Canarias. No obstante, al tratarse de un territorio extracomunitario a efectos del IVA, <strong>los pedidos con destino a Canarias no incluyen IVA peninsular</strong>. Una vez que el paquete llegue a las islas, puede estar sujeto a <strong>gastos de aduana y al pago del IGIC (Impuesto General Indirecto Canario)</strong> local, según la normativa vigente. Queremos informarle de ello con antelación para evitar cualquier sorpresa en el momento de la entrega.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&q=80&w=800" alt="Envíos y Empaquetado" style="width: 100%; height: 350px; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2);">
+                    </div>
+                </div>
+            </div>
+
+            <div id="nosotros-legal" style="display: none;">
+                <div class="caja-texto" style="margin-bottom: 4rem; padding: 3rem; text-align: left;">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px solid var(--color-primario); padding-bottom: 0.5rem;" data-i18n="legal-titulo">Aviso Legal y Condiciones Generales</h3>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="legal-1"><strong>1. Datos Identificativos:</strong> En cumplimiento con el deber de información recogido en artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y del Comercio Electrónico (LSSICE), a continuación se reflejan los siguientes datos: la empresa titular de dominio web es CheeseCakeHouse S.L., con domicilio a estos efectos en Pza. Baldomero Iglesias, Torrelavega, número de C.I.F.: B-12345678.</p>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="legal-2"><strong>2. Usuarios:</strong> El acceso y/o uso de este portal de CheeseCakeHouse S.L. atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, las Condiciones Generales de Uso aquí reflejadas. Las citadas Condiciones serán de aplicación independientemente de las Condiciones Generales de Contratación que en su caso resulten de obligado cumplimiento.</p>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="legal-3"><strong>3. Uso del portal:</strong> cheesecakehouse.com proporciona el acceso a multitud de informaciones, servicios, programas o datos (en adelante, "los contenidos") en Internet pertenecientes a CheeseCakeHouse S.L. o a sus licenciantes a los que el USUARIO pueda tener acceso. El USUARIO asume la responsabilidad del uso del portal.</p>
+                    
+                    <h3 style="color: var(--color-primario); margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px solid var(--color-primario); padding-bottom: 0.5rem;" data-i18n="privacidad-titulo">Política de Privacidad (RGPD)</h3>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="privacidad-0">De conformidad con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo aplicable a partir del 25 de mayo de 2018 (RGPD), y la Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales...</p>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="privacidad-1"><strong>1. Finalidad del tratamiento:</strong> Sus datos serán utilizados para gestionar su registro como usuario, procesar sus pedidos de tartas, enviar notificaciones sobre el estado de sus envíos, y, si lo ha consentido, remitirle comunicaciones comerciales.</p>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="privacidad-2"><strong>2. Derechos del interesado:</strong> Los clientes tienen derecho a acceder, rectificar y suprimir sus datos, así como otros derechos reconocidos en la normativa vigente, dirigiéndose por escrito a admin@cheesecakehouse.com adjuntando copia de un documento identificativo.</p>
+                    
+                    <h3 style="color: var(--color-primario); margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px solid var(--color-primario); padding-bottom: 0.5rem;" data-i18n="normativa-titulo">Normativa de Consumo y Devoluciones</h3>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="normativa-0">En base a la Ley General para la Defensa de los Consumidores y Usuarios, dado que los productos comercializados en esta web son alimentos perecederos (artículo 103 excepciones al derecho de desistimiento), <strong>no aplica el derecho de devolución o desistimiento</strong> una vez que el pedido ha entrado en fase de preparación.</p>
+                    <p style="margin-bottom: 1.5rem; line-height: 1.8;" data-i18n="normativa-1"><strong>Garantía de Calidad:</strong> Únicamente se aceptarán devoluciones si el producto entregado presenta defectos de calidad evidentes o daños severos durante el transporte. El cliente deberá notificarlo en un plazo máximo de 24 horas adjuntando fotografías para gestionar su reemplazo o reembolso.</p>
+                    <p style="line-height: 1.8;" data-i18n="normativa-2"><strong>Hoja de Reclamaciones:</strong> Existen hojas de reclamaciones a disposición del consumidor en nuestro establecimiento físico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_contacto" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="contacto-titulo">Contacto</h2>
+            <div class="contacto-grid" style="grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <!-- Formulario de contacto -->
+                <div class="caja-texto" style="margin: 0;">
+                    <form id="formulario-contacto" onsubmit="gestorValidacion.validarContacto(event)" novalidate>
+                        <div class="grupo-formulario">
+                            <label for="cont-nombre" data-i18n="lbl-nombre">Nombre y Apellidos:</label>
+                            <input type="text" id="cont-nombre" class="input-form ancho-total">
+                            <span id="err-cont-nombre" style="display:none; color:red; font-size:0.85rem; margin-top:5px; font-weight:bold;" data-i18n="err-obligatorio"></span>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="cont-email" data-i18n="lbl-email">Correo Electrónico:</label>
+                            <input type="email" id="cont-email" class="input-form ancho-total">
+                            <span id="err-cont-email" style="display:none; color:red; font-size:0.85rem; margin-top:5px; font-weight:bold;" data-i18n="err-email"></span>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="cont-mensaje" data-i18n="lbl-mensaje">Mensaje:</label>
+                            <textarea id="cont-mensaje" rows="4" class="input-form ancho-total"></textarea>
+                            <span id="err-cont-mensaje" style="display:none; color:red; font-size:0.85rem; margin-top:5px; font-weight:bold;" data-i18n="err-obligatorio"></span>
+                        </div>
+                        <button type="submit" class="boton boton-primario ancho-total" data-i18n="btn-enviar">Enviar Mensaje</button>
+                    </form>
+                </div>
+
+                <!-- Reseñas destacadas -->
+                <div class="info-adicional">
+                    <h3 data-i18n="titulo-resenas" style="color: var(--color-primario); margin-bottom: 1rem;">Reseñas Destacadas</h3>
+                    <div class="resena-tarjeta">
+                        <p data-i18n="resena-1">"Las mejores tartas de Cantabria sin duda. La de pistacho es una obra de arte."</p>
+                        <span class="estrellas">⭐⭐⭐⭐⭐ - María G.</span>
+                    </div>
+                    <div class="resena-tarjeta">
+                        <p data-i18n="resena-2">"El pedido llegó a la hora exacta y el empaquetado era perfecto. Repetiré seguro."</p>
+                        <span class="estrellas">⭐⭐⭐⭐⭐ - Carlos R.</span>
+                    </div>
+                    <div class="resena-tarjeta">
+                        <p data-i18n="resena-3">"Textura increíble. Se nota que utilizan ingredientes naturales y de primera calidad."</p>
+                        <span class="estrellas">⭐⭐⭐⭐ - Elena M.</span>
+                    </div>
+                </div>
+
+                <!-- Mapa interactivo -->
+                <div class="caja-texto" style="margin: 0; padding: 1rem;">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-map-marker-alt"></i> <span data-i18n="contacto-ubicacion">Nuestra ubicación</span></h3>
+                    <div id="mapa-contacto" style="height: 300px; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--color-borde);"></div>
+                    <p style="font-size: 0.9rem; color: var(--color-texto);">
+                        <i class="fas fa-store"></i> <strong>CheeseCakeHouse</strong><br>
+                        Pza. Baldomero Iglesias, 1<br>
+                        39300 Torrelavega, Cantabria<br>
+                        <i class="fas fa-clock"></i> <span data-i18n="contacto-horario">Horario: L-V 9:00–20:00, Sá 10:00–14:00</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_carrito" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="carrito-titulo">Tu Carrito de la Compra</h2>
+            <div class="caja-texto" style="max-width: 900px;">
+                <div id="contenedor-items-carrito"></div>
+                <div style="text-align: right; margin-top: 3rem;">
+                    <h3 style="margin-bottom: 1rem;"><span data-i18n="carrito-subtotal">Subtotal:</span> <span id="carrito-total">0.00</span>€</h3>
+                    <button class="boton boton-primario" onclick="gestorCarrito.procederAlPago()" style="margin-top: 1.5rem;" data-i18n="btn-finalizar">Finalizar Compra</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_checkout" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="chk-titulo">Finalizar Pedido</h2>
+            <div class="caja-texto" style="max-width: 800px; margin: 0 auto;">
+                
+                <div id="checkout-paso-1">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="chk-paso1">Paso 1: Dirección de Envío</h3>
+                    <p style="background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px; padding: 0.8rem 1.2rem; color: #2e7d32; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                        <i class="fas fa-info-circle"></i> <span data-i18n="chk-solo-espana"><strong>Solo realizamos envíos dentro de España.</strong> El IVA ya está incluido en todos los precios mostrados.</span>
+                    </p>
+                    <input type="hidden" id="chk-pais" value="ES">
+                    <div class="grupo-formulario">
+                        <label data-i18n="lbl-dir">Calle y número:</label>
+                        <input type="text" id="chk-direccion" class="input-form ancho-total" placeholder="Ej: Calle Mayor, 12" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="grupo-formulario" style="flex: 1;">
+                            <label data-i18n="lbl-piso">Piso / Planta:</label>
+                            <input type="text" id="chk-piso" class="input-form ancho-total" data-i18n-placeholder="placeholder-piso" placeholder="Ej: 3, Bajo, Ático...">
+                        </div>
+                        <div class="grupo-formulario" style="flex: 1;">
+                            <label data-i18n="lbl-puerta">Puerta:</label>
+                            <input type="text" id="chk-puerta" class="input-form ancho-total" data-i18n-placeholder="placeholder-puerta" placeholder="Ej: A, B, Izq., Dcha.">
+                        </div>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label data-i18n="lbl-tipo-inmueble">Tipo de inmueble:</label>
+                        <select id="chk-tipo-inmueble" class="input-form ancho-total">
+                            <option value="Piso" data-i18n-option="opt-piso">Piso</option>
+                            <option value="Apartamento" data-i18n-option="opt-apartamento">Apartamento</option>
+                            <option value="Casa" data-i18n-option="opt-casa">Casa / Chalet</option>
+                            <option value="Empresa" data-i18n-option="opt-empresa">Empresa / Local comercial</option>
+                            <option value="Otro" data-i18n-option="opt-otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label data-i18n="lbl-ciudad">Ciudad:</label>
+                        <input type="text" id="chk-ciudad" value="Torrelavega" class="input-form ancho-total" required>
+                    </div>
+                    <div class="grupo-formulario">
+                        <label data-i18n="lbl-cp">Código Postal (5 dígitos):</label>
+                        <input type="text" id="chk-cp" class="input-form ancho-total" required maxlength="5" oninput="gestorCheckout.actualizarIvaCanarias(this.value)">
+                    </div>
+                    <div id="aviso-canarias" style="display:none; background: #fff3e0; border: 1px solid #ffb74d; border-radius: 8px; padding: 0.8rem 1.2rem; color: #e65100; font-size: 0.92rem; margin-top: 0.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i> <span data-i18n="chk-aviso-canarias"><strong>Envío a Canarias:</strong> Al ser territorio extracomunitario, el pedido <strong>no lleva IVA peninsular</strong>. Sin embargo, puede estar sujeto a <strong>gastos de aduana y al pago del IGIC local</strong> en destino. Le informamos para evitar sorpresas en la entrega.</span>
+                    </div>
+                    <button class="boton boton-primario ancho-total" style="margin-top: 2.5rem;" onclick="gestorCheckout.siguientePaso(2)" data-i18n="btn-sig-pago">Siguiente: Método de Pago</button>
+                </div>
+
+                <div id="checkout-paso-2" style="display: none;">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="chk-paso2">Paso 2: Método de Pago</h3>
+
+                    <div class="grupo-formulario" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; background: var(--color-fondo); border: 2px solid var(--color-borde); border-radius: 8px; padding: 0.8rem 1.2rem; cursor: pointer; flex: 1; min-width: 130px; transition: var(--transicion);" id="lbl-pago-tarjeta">
+                            <input type="radio" name="pago" value="Tarjeta" checked onchange="gestorCheckout.toggleCampoTarjeta(); document.querySelectorAll('[id^=lbl-pago]').forEach(function(el){el.style.borderColor='var(--color-borde)'; el.style.background='var(--color-fondo)'}); this.parentElement.style.borderColor='var(--color-primario)'; this.parentElement.style.background='var(--color-primario)22';">
+                            <span style="font-size: 1.4rem;">💳</span> <span style="font-weight: 600;" data-i18n="pago-tarjeta">Tarjeta</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; background: var(--color-fondo); border: 2px solid var(--color-borde); border-radius: 8px; padding: 0.8rem 1.2rem; cursor: pointer; flex: 1; min-width: 130px; transition: var(--transicion);" id="lbl-pago-paypal">
+                            <input type="radio" name="pago" value="Paypal" onchange="gestorCheckout.toggleCampoTarjeta(); document.querySelectorAll('[id^=lbl-pago]').forEach(function(el){el.style.borderColor='var(--color-borde)'; el.style.background='var(--color-fondo)'}); this.parentElement.style.borderColor='var(--color-primario)'; this.parentElement.style.background='var(--color-primario)22';">
+                            <span style="font-size: 1.4rem;">🅿️</span> <span style="font-weight: 600;">PayPal</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; background: var(--color-fondo); border: 2px solid var(--color-borde); border-radius: 8px; padding: 0.8rem 1.2rem; cursor: pointer; flex: 1; min-width: 130px; transition: var(--transicion);" id="lbl-pago-bizum">
+                            <input type="radio" name="pago" value="Bizum" onchange="gestorCheckout.toggleCampoTarjeta(); document.querySelectorAll('[id^=lbl-pago]').forEach(function(el){el.style.borderColor='var(--color-borde)'; el.style.background='var(--color-fondo)'}); this.parentElement.style.borderColor='var(--color-primario)'; this.parentElement.style.background='var(--color-primario)22';">
+                            <span style="font-size: 1.4rem;">📱</span> <span style="font-weight: 600;">Bizum</span>
+                        </label>
+                    </div>
+
+                    <div id="campo-tarjeta" style="background: var(--color-fondo); border: 1px solid var(--color-borde); border-radius: 10px; padding: 1.5rem; margin-bottom: 1rem;">
+                        <p style="font-weight: 600; color: var(--color-primario); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;" data-i18n="chk-tarjeta-titulo">💳 Datos de la Tarjeta</p>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-tarjeta-num">Número de Tarjeta (16 dígitos):</label>
+                            <input type="text" id="chk-tarjeta" class="input-form ancho-total" placeholder="1234 5678 9012 3456" maxlength="16" style="letter-spacing: 0.1em;">
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <div class="grupo-formulario" style="flex: 1;">
+                                <label data-i18n="lbl-caducidad">Fecha de Caducidad:</label>
+                                <input type="text" id="chk-caducidad" class="input-form ancho-total" placeholder="MM/AA" maxlength="5" oninput="if(this.value.length===2&&!this.value.includes('/'))this.value+='/'" style="letter-spacing: 0.1em;">
+                            </div>
+                            <div class="grupo-formulario" style="flex: 1;">
+                                <label data-i18n="lbl-cvv">CVV / CVC:</label>
+                                <input type="password" id="chk-cvv" class="input-form ancho-total" placeholder="•••" maxlength="4" style="letter-spacing: 0.2em;">
+                            </div>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;" data-i18n="chk-ssl">🔒 Tus datos están protegidos con cifrado SSL de 256 bits.</p>
+                    </div>
+
+                    <div id="campo-bizum" style="display: none; background: var(--color-fondo); border: 1px solid var(--color-borde); border-radius: 10px; padding: 1.5rem; margin-bottom: 1rem;">
+                        <p style="font-weight: 600; color: var(--color-primario); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;" data-i18n="chk-bizum-titulo">📱 Pago con Bizum</p>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-telefono-bizum">Número de Teléfono Móvil:</label>
+                            <input type="tel" id="chk-telefono-bizum" class="input-form ancho-total" placeholder="612 345 678" maxlength="9" style="letter-spacing: 0.05em;">
+                        </div>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;" data-i18n="chk-bizum-info">📲 Recibirás una solicitud de pago en la app de tu banco. Acéptala para confirmar el pedido.</p>
+                    </div>
+
+                    <div id="campo-paypal" style="display: none; background: var(--color-fondo); border: 1px solid var(--color-borde); border-radius: 10px; padding: 1.5rem; margin-bottom: 1rem;">
+                        <p style="font-weight: 600; color: var(--color-primario); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;" data-i18n="chk-paypal-titulo">🅿️ Pago con PayPal</p>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-paypal-email">Email de tu cuenta PayPal:</label>
+                            <input type="email" id="chk-cuenta-paypal" class="input-form ancho-total" placeholder="tucuenta@paypal.com">
+                        </div>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 0.5rem;" data-i18n="chk-paypal-info">🔗 Serás redirigido a PayPal para autorizar el pago de forma segura.</p>
+                    </div>
+
+                    <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                        <button class="boton" style="background-color: #ccc;" onclick="gestorCheckout.siguientePaso(1)" data-i18n="btn-atras">Atrás</button>
+                        <button class="boton boton-primario" onclick="gestorCheckout.siguientePaso(3)" data-i18n="btn-sig-conf">Siguiente: Confirmación</button>
+                    </div>
+                </div>
+
+                <div id="checkout-paso-3" style="display: none;">
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="chk-paso3">Paso 3: Resumen de su Pedido</h3>
+
+                    <div id="chk-bloque-puntos" style="background: var(--color-fondo); border: 1px solid var(--color-borde); border-radius: 10px; padding: 1.2rem; margin-bottom: 1.5rem;">
+                        <p style="font-weight: 600; color: var(--color-primario); margin-bottom: 0.8rem;">🏆 <span data-i18n="chk-tus-puntos">Tus Puntos:</span> <span id="chk-puntos-disponibles">0</span> pts</p>
+                        <p id="chk-puntos-sin-beneficios" style="font-size: 0.88rem; color: #888;"></p>
+
+                        <div id="bloque-compra-gratis-200" style="display: none; background: linear-gradient(135deg, #fff8e1, #fff3cd); border: 2px solid var(--color-secundario); border-radius: 8px; padding: 1rem; margin-top: 0.8rem;">
+                            <p style="font-weight: 700; color: var(--color-primario); margin-bottom: 0.4rem;" data-i18n="chk-compra-gratis-titulo">🎁 ¡Tienes una Compra Gratis disponible!</p>
+                            <p style="font-size: 0.88rem; color: #555; margin-bottom: 0.7rem;" data-i18n-puntos="chk-puntos-gratis-desc">Tienes <strong><span id="chk-puntos-compra-gratis">0</span> puntos</strong> acumulados. Puedes canjear <strong>200 puntos</strong> para que este pedido sea completamente gratis.</p>
+                            <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: var(--color-primario);">
+                                <input type="checkbox" id="chk-usar-compra-gratis" onchange="gestorCheckout.recalcularConPuntos()" style="width: 18px; height: 18px; accent-color: var(--color-primario);">
+                                <span data-i18n="chk-compra-gratis-btn">Usar compra gratis (−200 puntos)</span>
+                            </label>
+                        </div>
+
+                        <div id="bloque-descuento-puntos" style="display: none; margin-top: 0.8rem;">
+                            <label for="chk-puntos-canjear" style="font-weight: 600; font-size: 0.9rem;"><span data-i18n="chk-canjear-label">Canjear puntos (10 pts = 1€, máximo</span> <span id="chk-max-descuento-puntos">0</span>€):</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.4rem;">
+                                <input type="range" id="chk-puntos-canjear" min="0" max="0" step="10" value="0" class="ancho-total" oninput="gestorCheckout.recalcularConPuntos()" style="accent-color: var(--color-primario); flex: 1;">
+                                <span style="font-size: 0.9rem; min-width: 60px; text-align: right; color: var(--color-primario); font-weight: 700;">-<span id="chk-descuento-puntos-valor">0.00</span>€</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--color-fondo); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border: 1px solid var(--color-borde);">
+                        <p style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span data-i18n="carrito-subtotal">Subtotal:</span> <strong id="resumen-subtotal">0.00€</strong></p>
+                        <p id="fila-descuento-promo" style="display:none; justify-content:space-between; margin-bottom:0.5rem; color: #27ae60;">
+                            <span id="etiqueta-descuento-promo" data-i18n="chk-descuento-bienvenida">🎉 Descuento Bienvenida (10%):</span>
+                            <strong id="resumen-descuento">- 0.00€</strong>
+                        </p>
+                        <p id="fila-descuento-puntos" style="display:none; justify-content:space-between; margin-bottom:0.5rem; color: #2980b9;">
+                            <span data-i18n="chk-descuento-puntos">💎 Descuento por Puntos:</span>
+                            <strong id="resumen-descuento-puntos">- 0.00€</strong>
+                        </p>
+                        <p id="fila-compra-gratis" style="display:none; justify-content:space-between; margin-bottom:0.5rem; color: #27ae60;">
+                            <span data-i18n="chk-compra-gratis-fila">🎁 Compra Gratis (200 pts):</span>
+                            <strong id="resumen-compra-gratis">- 0.00€</strong>
+                        </p>
+                        <p style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color: var(--color-secundario);"><span data-i18n="res-iva">IVA Calculado:</span> <strong id="resumen-iva">0.00€</strong></p>
+                        <hr style="border: 0; border-top: 1px solid var(--color-borde); margin: 1rem 0;">
+                        <p style="display:flex; justify-content:space-between; font-size:1.3rem;"><span data-i18n="res-total">TOTAL A PAGAR:</span> <strong id="resumen-total" style="color: var(--color-primario);">0.00€</strong></p>
+                    </div>
+
+                    <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                        <button class="boton" style="background-color: #ccc;" onclick="gestorCheckout.siguientePaso(2)" data-i18n="btn-atras">Atrás</button>
+                        <button class="boton boton-primario" onclick="gestorCheckout.procesarPedido()" data-i18n="btn-confirmar">Confirmar Compra Segura</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="pantalla_login" class="seccion-oculta">
+            <div id="indicadorCargalogin" class="spinner-carga" style="display: none;"></div>
+            <div id="bloqueFormlogin" style="max-width: 600px; margin: 0 auto;">
+                <div class="caja-texto">
+                    <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="login-titulo">Iniciar Sesión</h2>
+                    <p id="avisoErrorLogin" style="color: red; font-weight: bold; margin-bottom: 1rem; display: none;"></p>
+                    <form id="formulario-login" onsubmit="gestorAutenticacion.procesarLogin(event)">
+                        <div class="grupo-formulario">
+                            <label for="login-identificador" data-i18n="lbl-email">Usuario o Correo Electrónico:</label>
+                            <input type="text" id="login-identificador" class="input-form ancho-total" required>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="login-password" data-i18n="lbl-pass">Contraseña:</label>
+                            <input type="password" id="login-password" class="input-form ancho-total" required>
+                        </div>
+                        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" style="margin-bottom: 15px;"></div>
+                        <button type="submit" class="boton boton-primario ancho-total" data-i18n="btn-login">Entrar</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1.5rem;">
+                        <a style="cursor: pointer; color: var(--color-primario); text-decoration: underline; font-weight: bold;" onclick="gestorNavegacion.irA('registro')" data-i18n="txt-no-cuenta">¿No tienes cuenta? Regístrate aquí</a>
+                    </p>
+                    <p style="text-align: center; margin-top: 0.8rem;">
+                        <a style="cursor: pointer; color: #888; font-size: 0.9rem; text-decoration: underline;" onclick="gestorNavegacion.irA('recuperar')" data-i18n="txt-olvidado">¿Olvidaste tu contraseña?</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_registro" class="seccion-oculta">
+            <div id="indicadorCargaregistro" class="spinner-carga" style="display: none;"></div>
+            <div id="bloqueFormregistro" style="max-width: 600px; margin: 0 auto;">
+                <div class="caja-texto">
+                    <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="registro-titulo">Crear Cuenta</h2>
+                    <p id="avisoErrorRegistro" style="color: red; font-weight: bold; margin-bottom: 1rem; display: none;"></p>
+                    <form id="formulario-registro" onsubmit="gestorAutenticacion.procesarRegistro(event)">
+                        <div class="grupo-formulario">
+                            <label for="reg-nombre" data-i18n="lbl-usuario">Nombre de Usuario:</label>
+                            <input type="text" id="reg-nombre" class="input-form ancho-total" required>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="reg-email" data-i18n="lbl-email">Correo Electrónico:</label>
+                            <input type="email" id="reg-email" class="input-form ancho-total" required>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="reg-password" data-i18n="lbl-pass-reg">Contraseña (Mínimo 6 caracteres):</label>
+                            <input type="password" id="reg-password" class="input-form ancho-total" required minlength="6">
+                        </div>
+                        <button type="submit" class="boton boton-primario ancho-total" data-i18n="btn-registro">Registrarse</button>
+                    </form>
+                    <p style="text-align: center; margin-top: 1.5rem;">
+                        <a style="cursor: pointer; color: var(--color-primario); text-decoration: underline; font-weight: bold;" onclick="gestorNavegacion.irA('login')" data-i18n="txt-si-cuenta">¿Ya tienes cuenta? Inicia sesión aquí</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PANTALLA RECUPERAR CONTRASEÑA ===== -->
+        <section id="pantalla_recuperar" class="seccion-oculta">
+            <div style="max-width: 520px; margin: 0 auto;">
+                <div class="caja-texto">
+
+                    <!-- PASO 1: Teléfono -->
+                    <div id="recup-paso1">
+                        <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="recup-titulo">Recuperar Contraseña</h2>
+                        <p style="color:#666; margin-bottom:1.5rem; font-size:0.95rem;" data-i18n="recup-desc">Introduce el correo electrónico de tu cuenta y tu número de teléfono. Te enviaremos un código de verificación por SMS.</p>
+                        <div class="grupo-formulario">
+                            <label data-i18n="recup-lbl-email">Correo electrónico de la cuenta:</label>
+                            <input type="email" id="recup-email" class="input-form ancho-total" placeholder="tucorreo@ejemplo.com" oninput="gestorRecuperacion.validarPaso1()">
+                            <small id="recup-email-error" style="color:red; display:none;" data-i18n="recup-email-error">No existe ninguna cuenta con ese correo electrónico.</small>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="recup-lbl-tel">Número de teléfono (España):</label>
+                            <div style="display:flex; gap:0.5rem; align-items:center;">
+                                <span style="background:var(--color-fondo); border:1px solid var(--color-borde); border-radius:6px; padding:0.6rem 0.8rem; font-size:0.95rem; color:var(--color-texto); white-space:nowrap;">🇪🇸 +34</span>
+                                <input type="tel" id="recup-telefono" class="input-form" style="flex:1;" placeholder="612 345 678" maxlength="9" oninput="gestorRecuperacion.validarPaso1()">
+                            </div>
+                            <small id="recup-tel-error" style="color:red; display:none;" data-i18n="recup-tel-error">Introduce un número español válido (9 dígitos, empieza por 6, 7 o 9).</small>
+                        </div>
+                        <button id="recup-btn-enviar" class="boton boton-primario ancho-total" onclick="gestorRecuperacion.enviarCodigo()" disabled data-i18n="recup-btn-enviar">Enviar código SMS</button>
+                        <p style="text-align:center; margin-top:1.2rem;">
+                            <a style="cursor:pointer; color:#888; font-size:0.9rem; text-decoration:underline;" onclick="gestorNavegacion.irA('login')" data-i18n="recup-volver">Volver al inicio de sesión</a>
+                        </p>
+                    </div>
+
+                    <!-- PASO 2: Código SMS -->
+                    <div id="recup-paso2" style="display:none;">
+                        <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="recup-titulo-sms">Código de Verificación</h2>
+                        <div style="background:var(--color-fondo); border:1px solid var(--color-borde); border-radius:8px; padding:1rem; margin-bottom:1.5rem; text-align:center;">
+                            <p style="font-size:0.9rem; color:#666; margin-bottom:0.3rem;" data-i18n="recup-sms-enviado">SMS enviado al número:</p>
+                            <p style="font-weight:bold; color:var(--color-primario); font-size:1.1rem;">+34 <span id="recup-tel-mostrado"></span></p>
+                            <small style="color:#888;" data-i18n="recup-sms-nota">Esto es una simulación. En un sistema real recibirías el SMS en tu móvil.</small>
+                        </div>
+                        <div style="background:#e8f5e9; border:1px solid #a5d6a7; border-radius:8px; padding:1rem; margin-bottom:1.5rem; text-align:center;">
+                            <p style="font-size:0.8rem; color:#555; margin-bottom:0.4rem;">📱 <strong data-i18n="recup-sms-simulado-label">SMS simulado:</strong></p>
+                            <p style="font-size:1.3rem; letter-spacing:0.4rem; font-weight:bold; color:#2e7d32;" id="recup-codigo-visible"></p>
+                            <small style="color:#777;" data-i18n="recup-sms-caduca">El código caduca en 5 minutos.</small>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="recup-lbl-codigo">Introduce el código de 6 dígitos:</label>
+                            <input type="text" id="recup-input-codigo" class="input-form ancho-total" placeholder="_ _ _ _ _ _" maxlength="6" style="letter-spacing:0.4rem; font-size:1.3rem; text-align:center; font-weight:bold;" oninput="gestorRecuperacion.validarCodigo(this)">
+                            <small id="recup-cod-error" style="color:red; display:none;" data-i18n="recup-cod-error">Código incorrecto. Comprueba el SMS simulado.</small>
+                        </div>
+                        <button id="recup-btn-verificar" class="boton boton-primario ancho-total" onclick="gestorRecuperacion.verificarCodigo()" disabled data-i18n="recup-btn-verificar">Verificar código</button>
+                        <p style="text-align:center; margin-top:1rem;">
+                            <a style="cursor:pointer; color:#888; font-size:0.85rem; text-decoration:underline;" onclick="gestorRecuperacion.reiniciar()" data-i18n="recup-reenviar">Reenviar código o cambiar número</a>
+                        </p>
+                    </div>
+
+                    <!-- PASO 3: Nueva contraseña -->
+                    <div id="recup-paso3" style="display:none;">
+                        <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="recup-titulo-nueva">Nueva Contraseña</h2>
+                        <p style="color:#666; margin-bottom:1.5rem; font-size:0.95rem;" data-i18n="recup-nueva-desc">¡Verificación completada! Introduce tu nueva contraseña.</p>
+                        <div class="grupo-formulario">
+                            <label data-i18n="recup-lbl-nueva">Nueva contraseña (mínimo 6 caracteres):</label>
+                            <input type="password" id="recup-nueva-pass" class="input-form ancho-total" minlength="6" oninput="gestorRecuperacion.validarNuevaPass()">
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="recup-lbl-confirmar">Confirmar nueva contraseña:</label>
+                            <input type="password" id="recup-confirmar-pass" class="input-form ancho-total" minlength="6" oninput="gestorRecuperacion.validarNuevaPass()">
+                            <small id="recup-pass-error" style="color:red; display:none;" data-i18n="recup-pass-error">Las contraseñas no coinciden.</small>
+                        </div>
+                        <button id="recup-btn-guardar" class="boton boton-primario ancho-total" onclick="gestorRecuperacion.guardarNuevaPass()" disabled data-i18n="recup-btn-guardar">Guardar nueva contraseña</button>
+                    </div>
+
+                    <!-- PASO 4: Éxito -->
+                    <div id="recup-paso4" style="display:none; text-align:center;">
+                        <div style="font-size:3.5rem; margin-bottom:1rem;">✅</div>
+                        <h2 class="titulo-seccion" style="margin-top:0;" data-i18n="recup-titulo-ok">¡Contraseña actualizada!</h2>
+                        <p style="color:#666; margin-bottom:2rem;" data-i18n="recup-ok-desc">Tu contraseña ha sido cambiada correctamente. Ya puedes iniciar sesión con tu nueva contraseña.</p>
+                        <button class="boton boton-primario ancho-total" onclick="gestorNavegacion.irA('login')" data-i18n="recup-btn-login">Ir al inicio de sesión</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="pantalla_perfil" class="seccion-oculta">
+            <div id="indicadorCargaperfil" class="spinner-carga" style="display: none;"></div>
+            
+            <div id="capaPerfil" class="contacto-grid" style="display: none;">
+                <div class="caja-texto" style="margin: 0;">
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="perfil-datos-cuenta">Datos de la Cuenta</h3>
+                        <p style="font-size: 1.1rem; margin-bottom: 0.5rem;"><i class="fas fa-user" style="color: var(--color-secundario); width: 25px;"></i> <span id="perfil-nombre"></span></p>
+                        <p style="font-size: 1.1rem; margin-bottom: 1.5rem;"><i class="fas fa-envelope" style="color: var(--color-secundario); width: 25px;"></i> <span id="perfil-correo"></span></p>
+                        <hr style="border: 0; border-top: 1px solid var(--color-borde);">
+                    </div>
+
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="perfil-editar">Editar Información Personal</h3>
+                    <form id="formulario-perfil" onsubmit="gestorPerfil.actualizarDatos(event)">
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-usuario">Nombre de Usuario:</label>
+                            <input type="text" id="perfil-edit-nombre" class="input-form ancho-total" required>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-email">Correo Electrónico:</label>
+                            <input type="email" id="perfil-edit-email" class="input-form ancho-total" required>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-dir-prin">Dirección de Envío Principal:</label>
+                            <input type="text" id="perfil-edit-direccion" class="input-form ancho-total" placeholder="Calle, Número, Localidad...">
+                        </div>
+                        <div class="grupo-formulario">
+                            <label data-i18n="lbl-pass-nueva">Nueva Contraseña (Opcional):</label>
+                            <input type="password" id="perfil-edit-password" class="input-form ancho-total" placeholder="Dejar en blanco para no modificar" minlength="6">
+                        </div>
+                        <button type="submit" class="boton boton-primario ancho-total" data-i18n="btn-guardar">Guardar Cambios en la Matriz</button>
+                    </form>
+                </div>
+                
+                <div class="caja-texto" style="margin: 0;">
+                    <div style="background:var(--color-fondo); border:1px solid var(--color-borde); border-radius:8px; padding:1rem; margin-bottom:1.5rem; text-align:center;">
+                        <h3 style="color:var(--color-primario); margin-bottom:0.8rem;"><i class="fas fa-trophy"></i> <span data-i18n="perfil-mis-puntos">Mis Puntos</span></h3>
+                        <div id="perfil-puntos-valor" style="font-size:1rem; color:var(--color-texto);">Cargando puntos...</div>
+                    </div>
+                    <h3 style="color: var(--color-primario); margin-bottom: 1rem;" data-i18n="perfil-pedidos">Mis Pedidos Recientes</h3>
+                    <div id="listaPedidosPerfil" style="border: 1px dashed var(--color-borde); padding: 2rem; border-radius: 8px; text-align: center; color: #777;">
+                        <div class="spinner-carga" style="margin: 0 auto; width: 30px; height: 30px; border-width: 3px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="pantalla_admin" class="seccion-oculta">
+            <h2 class="titulo-seccion" data-i18n="admin-panel-titulo">Panel de Administración</h2>
+
+            <div style="max-width: 1200px; margin: 0 auto 2rem auto; display: flex; gap: 1rem; justify-content: center;">
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('usuarios')" style="min-width: 150px;">
+                    <i class="fas fa-users"></i> <span data-i18n="admin-btn-usuarios">Usuarios</span>
+                </button>
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('productos')" style="min-width: 150px;">
+                    <i class="fas fa-boxes"></i> <span data-i18n="admin-btn-productos">Productos</span>
+                </button>
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('pedidos')" style="min-width: 150px;">
+                    <i class="fas fa-receipt"></i> <span data-i18n="admin-btn-pedidos">Pedidos</span>
+                </button>
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('creador')" style="min-width: 150px;">
+                    <i class="fas fa-birthday-cake"></i> <span data-i18n="admin-btn-creador">Crear Tarta</span>
+                </button>
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('mensajes')" style="min-width: 150px;">
+                    <i class="fas fa-envelope"></i> <span data-i18n="admin-btn-mensajes">Mensajes</span>
+                </button>
+                <button class="boton boton-primario" onclick="gestorAdmin.mostrarSeccion('valoraciones')" style="min-width: 150px;">
+                    <i class="fas fa-star"></i> <span data-i18n="admin-btn-valoraciones">Valoraciones</span>
+                </button>
+            </div>
+
+            <div id="areaAdminusuarios" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-users"></i> <span data-i18n="admin-usuarios-h3">Gestión de Usuarios Registrados</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-usuarios-desc">Listado completo de cuentas del sistema. Puede editar o eliminar cualquier usuario.</p>
+                <div id="listadoUsuarios" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-usuarios-placeholder">Pulse el botón "Usuarios" para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div id="areaAdminproductos" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-boxes"></i> <span data-i18n="admin-productos-h3">Gestión de Productos del Catálogo</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-productos-desc">Consola para visualizar, editar y eliminar productos en tiempo real.</p>
+                <div id="listadoProductos" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-productos-placeholder">Pulse el botón "Productos" para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div id="areaAdminpedidos" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-receipt"></i> <span data-i18n="admin-pedidos-h3">Historial de Pedidos del Sistema</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-pedidos-desc">Registro de todas las transacciones realizadas por los clientes.</p>
+                <div id="listadoPedidos" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-pedidos-placeholder">Pulse el botón "Pedidos" para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div id="areaAdmincreador" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-birthday-cake"></i> <span data-i18n="admin-creador-h3">Configuración de Precios del Creador de Tartas</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-creador-desc">Modifique el precio base y el coste por ingrediente extra de la sección "Crear tu Tarta".</p>
+                <div id="listadoConfiguracion" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-creador-placeholder">Pulse el botón "Crear Tarta" para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div id="areaAdminmensajes" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-envelope"></i> <span data-i18n="admin-mensajes-h3">Mensajes de Contacto de Clientes</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-mensajes-desc">Listado de todos los mensajes enviados por los clientes a través del formulario de contacto.</p>
+                <div id="listadoMensajes" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-mensajes-placeholder">Pulse el botón "Mensajes" para cargar los datos.</p>
+                </div>
+            </div>
+
+            <div id="areaAdminvaloraciones" class="caja-texto" style="max-width: 1200px; margin: 0 auto 2rem auto; display: none;">
+                <h3 style="color: var(--color-primario); margin-bottom: 1rem;"><i class="fas fa-star"></i> <span data-i18n="admin-valoraciones-h3">Valoraciones de Productos</span></h3>
+                <p style="margin-bottom: 1rem;" data-i18n="admin-valoraciones-desc">Registro de todas las valoraciones y comentarios dejados por los clientes en los productos.</p>
+                <div id="listadoValoraciones" style="overflow-x: auto;">
+                    <p style="color: #777; text-align: center;" data-i18n="admin-valoraciones-placeholder">Pulse el botón "Valoraciones" para cargar los datos.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-contenido">
+            <div class="footer-columna">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">CheeseCakeHouse</h3>
+                <p data-i18n="footer-desc">Artesanía en cada porción. Seleccionamos nuestros ingredientes con un estándar de calidad insuperable desde 2020.</p>
+            </div>
+            <div class="footer-columna">
+                <h3 data-i18n="footer-enlaces">Accesos Rápidos</h3>
+                <ul>
+                    <li><a onclick="gestorNavegacion.irA('inicio')"><i class="fas fa-angle-right"></i> <span data-i18n="nav-inicio">Inicio</span></a></li>
+                    <li><a onclick="gestorNavegacion.irA('carta')"><i class="fas fa-angle-right"></i> <span data-i18n="carta-titulo">Nuestra Carta</span></a></li>
+                    <li><a onclick="gestorNavegacion.irA('nosotros')"><i class="fas fa-angle-right"></i> <span data-i18n="nav-nosotros">Historia</span></a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <h3 data-i18n="footer-legal">Legal y Soporte</h3>
+                <ul>
+                    <li><a onclick="gestorNavegacion.irA('contacto')"><i class="fas fa-angle-right"></i> <span data-i18n="footer-ayuda">Centro de Ayuda</span></a></li>
+                    <li><a onclick="gestorNavegacion.irA('nosotros'); mostrarSubMenuNosotros('legal'); window.scrollTo(0,0);" style="cursor: pointer;"><i class="fas fa-angle-right"></i> <span data-i18n="footer-privacidad">Política de Privacidad</span></a></li>
+                    <li><a onclick="gestorNavegacion.irA('nosotros'); mostrarSubMenuNosotros('legal'); window.scrollTo(0,0);" style="cursor: pointer;"><i class="fas fa-angle-right"></i> <span data-i18n="footer-terminos">Términos del Servicio</span></a></li>
+                </ul>
+            </div>
+            <div class="footer-columna">
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-map-marker-alt" style="color: var(--color-secundario); width: 20px;"></i> Pza. Baldomero Iglesias, Torrelavega</p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-phone" style="color: var(--color-secundario); width: 20px;"></i> +34 942 00 00 00</p>
+                <p><i class="fas fa-envelope" style="color: var(--color-secundario); width: 20px;"></i> admin@cheesecakehouse.com</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-i18n="footer-copy">© 2026 CheeseCakeHouse. Sistema operado bajo protocolos seguros.</p>
+        </div>
+    </footer>
+
+    <script src="js/idioma.js"></script>
+    <script src="js/tema.js"></script>
+    <script src="js/enrutador.js"></script>
+    <script src="js/api-productos.js"></script>
+    <script src="js/autenticacion.js"></script>
+    <script src="js/recuperacion.js"></script>
+    <script src="js/carrito.js"></script>
+    <script src="js/extras.js"></script>
+    <script src="js/checkout.js"></script>
+    <script src="js/creador.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- MODAL VALORACION -->
+    <div id="modal-valoracion" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:var(--color-fondo-seccion); border-radius:12px; padding:2rem; max-width:450px; width:90%; position:relative;">
+            <button onclick="gestorValoraciones.cerrarModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--color-texto);">✕</button>
+            <h3 id="modal-val-titulo" style="color:var(--color-primario); margin-bottom:1.5rem;"></h3>
+            <input type="hidden" id="modal-val-producto-id">
+            <input type="hidden" id="modal-val-estrellas" value="0">
+            <p style="margin-bottom:0.5rem; font-weight:bold; color:var(--color-texto);" data-i18n="modal-val-puntuacion">Tu puntuación:</p>
+            <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem;">
+                <span class="estrella-selector" onclick="gestorValoraciones.seleccionarEstrella(1)" style="font-size:2rem; cursor:pointer; color:#ccc;">★</span>
+                <span class="estrella-selector" onclick="gestorValoraciones.seleccionarEstrella(2)" style="font-size:2rem; cursor:pointer; color:#ccc;">★</span>
+                <span class="estrella-selector" onclick="gestorValoraciones.seleccionarEstrella(3)" style="font-size:2rem; cursor:pointer; color:#ccc;">★</span>
+                <span class="estrella-selector" onclick="gestorValoraciones.seleccionarEstrella(4)" style="font-size:2rem; cursor:pointer; color:#ccc;">★</span>
+                <span class="estrella-selector" onclick="gestorValoraciones.seleccionarEstrella(5)" style="font-size:2rem; cursor:pointer; color:#ccc;">★</span>
+            </div>
+            <div class="grupo-formulario">
+                <label style="color:var(--color-texto);" data-i18n="modal-val-comentario-lbl">Comentario (opcional):</label>
+                <textarea id="modal-val-comentario" class="input-form ancho-total" rows="3" data-i18n-placeholder="modal-val-placeholder" placeholder="Cuéntanos tu experiencia..."></textarea>
+            </div>
+            <button class="boton boton-primario ancho-total" onclick="gestorValoraciones.guardar()" style="margin-top:1rem;" data-i18n="modal-val-btn">Enviar valoración</button>
+        </div>
+    </div>
+
+    <!-- MODAL CALCULADORA -->
+    <div id="modal-calculadora" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:var(--color-fondo-seccion); border-radius:12px; padding:2rem; max-width:420px; width:90%; position:relative;">
+            <button onclick="gestorCalculadora.cerrar()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--color-texto);">✕</button>
+            <h3 style="color:var(--color-primario); margin-bottom:0.5rem;" data-i18n="modal-calc-titulo">🍰 Calculadora de Porciones</h3>
+            <p style="color:#777; font-size:0.9rem; margin-bottom:1.5rem;" data-i18n="modal-calc-desc">Dinos cuántas personas sois y te recomendamos el tamaño ideal.</p>
+            <div class="grupo-formulario">
+                <label style="color:var(--color-texto); font-weight:bold;" data-i18n="modal-calc-lbl">Número de personas:</label>
+                <input type="number" id="calc-personas" class="input-form ancho-total" min="1" max="50" value="4" oninput="gestorCalculadora.calcular()">
+            </div>
+            <div id="calc-resultado"></div>
+            <button class="boton boton-primario ancho-total" onclick="gestorCalculadora.cerrar()" style="margin-top:1.5rem;" data-i18n="modal-calc-btn">Entendido</button>
+        </div>
+    </div>
+
+    <!-- MODAL SELECCIÓN DE TAMAÑO -->
+    <div id="modal-talla" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:var(--color-fondo-seccion); border-radius:12px; padding:2rem; max-width:400px; width:90%; position:relative;">
+            <button onclick="gestorProductos.cerrarModalTalla()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--color-texto);">✕</button>
+            <h3 style="color:var(--color-primario); margin-bottom:1rem;" data-i18n="modal-talla-titulo">Elige el tamaño</h3>
+            <div style="margin-bottom:1.5rem;">
+                <label style="display:block; margin-bottom:0.8rem; cursor:pointer;">
+                    <input type="radio" name="talla" value="pequena" checked> <span data-i18n="modal-talla-pequena">🍰 Pequeña (70% del precio)</span>
+                </label>
+                <label style="display:block; margin-bottom:0.8rem; cursor:pointer;">
+                    <input type="radio" name="talla" value="mediana"> <span data-i18n="modal-talla-mediana">🎂 Mediana (100% del precio)</span>
+                </label>
+                <label style="display:block; margin-bottom:0.8rem; cursor:pointer;">
+                    <input type="radio" name="talla" value="grande"> <span data-i18n="modal-talla-grande">🍰 Grande (140% del precio)</span>
+                </label>
+            </div>
+            <button class="boton boton-primario ancho-total" onclick="gestorProductos.agregarConTalla()" data-i18n="modal-talla-btn">Añadir al carrito</button>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar el mapa cuando se muestra la sección de contacto
+        function iniciarMapaContacto() {
+            if (document.getElementById('mapa-contacto') && !window.mapaIniciado) {
+                var mapa = L.map('mapa-contacto').setView([43.3525, -4.0488], 15); // Coordenadas de Torrelavega
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 19
+                }).addTo(mapa);
+                var marker = L.marker([43.3525, -4.0488]).addTo(mapa);
+                marker.bindPopup("<b>CheeseCakeHouse</b><br>Pza. Baldomero Iglesias, Torrelavega").openPopup();
+                window.mapaIniciado = true;
+            }
+        }
+
+        // Observar cuándo se muestra la sección de contacto
+        var observer = new MutationObserver(function() {
+            var contactoSection = document.getElementById('pantalla_contacto');
+            if (contactoSection && contactoSection.classList.contains('seccion-oculta') === false) {
+                setTimeout(iniciarMapaContacto, 100);
+            }
+        });
+        observer.observe(document.getElementById('pantalla_contacto') || document.body, { attributes: true, attributeFilter: ['class'] });
+        
+        // También iniciar si ya está visible al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('pantalla_contacto') && !document.getElementById('pantalla_contacto').classList.contains('seccion-oculta')) {
+                iniciarMapaContacto();
+            }
+        });
+
+        // Resaltar la tarjeta seleccionada por defecto al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            var lblTarjeta = document.getElementById('lbl-pago-tarjeta');
+            if (lblTarjeta) {
+                lblTarjeta.style.borderColor = 'var(--color-primario)';
+                lblTarjeta.style.background  = 'var(--color-primario)22';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+/* CONTENEDOR DEL VIDEO */
+
+/* Fuerza la expansion horizontal absoluta eliminando margenes residuales del viewport. */
+.seccion-hero {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    width: 100vw;
+    margin: 0;
+    margin-left: calc(-50vw + 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: #1a1a1a;
+}
+
+/* En móvil cancelamos el truco de margin-left negativo que causa scroll horizontal */
+@media (max-width: 768px) {
+    .seccion-hero {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        min-height: 55vh;
+    }
+}
+
+/* CONFIGURACION VIDEO */
+
+/* Aplica cobertura estandar con ajuste adaptativo y filtro de atenuacion electromagnetica. */
+.video-fondo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+    z-index: 1;
+    filter: brightness(0.6);
+}
+
+/* Fondo desenfocado que rellena los laterales con la misma imagen */
+.video-fondo-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    filter: brightness(0.35) blur(18px);
+    transform: scale(1.1);
+    transition: opacity 1s ease-in-out;
+}
+
+/* ZONA DE TEXTOS */
+
+/* Establece ordenacion en el eje Z forzando renderizado en capa superior al lienzo. */
+.contenido-hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* CAJA DE FONDO OSCURA */
+.caja-fondo-oscura {
+    background: rgba(0,0,0,0.4);
+    padding: 3rem;
+    border-radius: 15px;
+    display: inline-block;
+    width: auto;
+}
+
+/* TITULO PRINCIPAL */
+
+/* Proyecta matriz logica de sombreado maximizando la relacion de contraste perceptivo. */
+.contenido-hero h2 {
+    font-size: 3.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* CAJA DEL CARRUSEL */
+
+/* Encapsula relacionalmente las representaciones graficas del subdirectorio visual. */
+.carrusel {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background: #000;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    width: 100%;
+}
+
+/* PISTA DE IMAGENES */
+
+/* Define limite altitudinal inamovible protegiendo la consistencia de la reticula visual. */
+.carrusel-pista {
+    position: relative;
+    width: 100%;
+    height: 350px;
+}
+
+/* CONFIGURACION DE FOTOS */
+
+/* Emplea canal alfa binario alterando la transmitancia para ocultacion base en transiciones. */
+.carrusel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+    z-index: 0;
+}
+
+/* IMAGENES INTERNAS */
+
+/* Ejecuta recorte adaptativo perimetral asegurando proporcion invariante en sub-marcos. */
+.carrusel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ETIQUETAS INFERIORES */
+
+/* Inyecta contenedor anclable pseudoespacial inferior con mascara semitransparente contrastada. */
+.carrusel-slide .etiqueta {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.7);
+    padding: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+}
+
+/* BOTONES INVISIBLES */
+
+/* Anula la representacion en el DOM operando integramente mediante pseudo-clases en CSS puro. */
+.carrusel input[type="radio"] {
+    display: none;
+}
+
+/* FLECHAS DEL CARRUSEL */
+
+/* Construye la interfaz botonera circular con variables de estado reactivas en transformaciones 2D. */
+.flecha-carrusel {
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    font-size: 1.5rem;
+    transition: var(--transicion);
+    backdrop-filter: blur(5px);
+}
+
+/*HOVER DE FLECHAS*/
+
+/*Colorea el fondo del boton al pasar el cursor*/
+.flecha-carrusel:hover {
+    background: var(--color-primario);
+    color: var(--color-fondo-seccion);
+}
+
+/*LADO IZQUIERDO*/
+
+/*Pega el boton a la izquierda del marco*/
+.flecha-izq {
+    left: 15px;
+}
+
+/*LADO DERECHO*/
+
+/*Pega el boton a la derecha del marco*/
+.flecha-der {
+    right: 15px;
+}
+
+/*LOGICA DE TRANSICION*/
+
+/*Muestra la imagen vinculada al boton que hemos pinchado*/
+#slide1:checked ~ .carrusel-pista .slide-1 {
+    opacity: 1;
+    z-index: 1;
+}
+
+#slide2:checked ~ .carrusel-pista .slide-2 {
+    opacity: 1;
+    z-index: 1;
+}
+
+#slide3:checked ~ .carrusel-pista .slide-3 {
+    opacity: 1;
+    z-index: 1;
+}
+
+/*LOGICA DE CONTROLES*/
+
+/*Despliega el grupo de flechas correcto para cada slide*/
+#slide1:checked ~ .controles-flechas .flechas-s1 {
+    display: block;
+}
+
+#slide2:checked ~ .controles-flechas .flechas-s2 {
+    display: block;
+}
+
+#slide3:checked ~ .controles-flechas .flechas-s3 {
+    display: block;
+}
+
+/*RESPONSIVO DE FOTOS*/
+
+/* iPad Mini / Air / Pro */
+@media (max-width: 1024px) {
+    .contenido-hero h2 {
+        font-size: 2.8rem !important;
+    }
+
+    .carrusel-pista {
+        height: 300px;
+    }
+}
+
+/* Móviles (≤ 768px) */
+@media (max-width: 768px) {
+    .contenido-hero h2 {
+        font-size: 1.9rem !important;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        white-space: normal;
+        margin-bottom: 0.8rem !important;
+    }
+
+    .contenido-hero h3 {
+        font-size: 1.2rem !important;
+        margin-bottom: 1.2rem !important;
+    }
+
+    .contenido-hero .boton {
+        font-size: 1rem !important;
+        padding: 12px 28px !important;
+    }
+
+    .caja-fondo-oscura {
+        padding: 1.5rem !important;
+        width: 92%;
+        max-width: 92%;
+        box-sizing: border-box;
+    }
+
+    /* Evita que el hero se desborde horizontalmente */
+    .seccion-hero {
+        overflow: hidden;
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    .carrusel {
+        width: 95%;
+    }
+
+    .carrusel-pista {
+        height: 260px;
+    }
+
+    .carrusel-slide .etiqueta {
+        font-size: 1rem;
+        padding: 10px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .flecha-carrusel {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 1rem;
+    }
+}
+
+/* iPhone SE / Samsung S8+ (pantallas estrechas ≤ 390px) */
+@media (max-width: 390px) {
+    .contenido-hero h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .contenido-hero h3 {
+        font-size: 1rem !important;
+    }
+
+    .caja-fondo-oscura {
+        padding: 1rem !important;
+        width: 98%;
+        max-width: 98%;
+    }
+
+    .carrusel-pista {
+        height: 220px;
+    }
+
+    .flecha-carrusel {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        font-size: 0.9rem;
+    }
+}

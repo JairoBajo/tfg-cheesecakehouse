@@ -1,0 +1,481 @@
+/*RULETA DE CARGA*/
+
+/*Genera un efecto giratorio para los tiempos de espera del programa*/
+.spinner-carga {
+    border: 5px solid var(--color-borde);
+    border-top: 5px solid var(--color-primario);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: girar 1s linear infinite;
+    margin: 4rem auto;
+}
+
+/*GIRO DEL SPINNER*/
+
+/*Establece los grados para crear la vuelta completa del diseño*/
+@keyframes girar {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/*VENTANA DE OFERTAS*/
+
+/*Configura el cuadro que ofrece descuentos como ventana flotante*/
+.popup-promo {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    background-color: var(--color-secundario);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 2000;
+    max-width: 300px;
+    animation: aparecerDer 0.5s ease;
+}
+
+/*TITULO DE OFERTA*/
+
+/*Aplica separacion del titulo respecto al texto en el popup*/
+.popup-promo h4 {
+    margin-bottom: 0.5rem;
+}
+
+/*CERRAR POPUP*/
+
+/*Coloca la x en la esquina derecha para poder ocultarlo*/
+.cerrar-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/*EFECTO DE ENTRADA*/
+
+/*Hacemos que el popup entre en pantalla deslizando de forma suave*/
+@keyframes aparecerDer {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* TABLA DE PRODUCTOS */
+
+/* Tres columnas en escritorio; se adapta a tablets y móviles con media queries */
+.cuadricula-productos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+/* CENTRADO ÚLTIMA FILA — Tartas Artesanales
+   Se usa flexbox en lugar de grid para que justify-content:center
+   afecte también a la última fila incompleta. Cada tarjeta tiene
+   un ancho calculado exactamente igual al de las 3 columnas del grid
+   normal (33.33% menos los gaps). */
+.cuadricula-productos.clasicas-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.cuadricula-productos.clasicas-grid .tarjeta-producto {
+    /* Ancho de 3 columnas con gap de 2rem entre ellas:
+       (100% - 2*2rem) / 3  ≈ calc(33.333% - 1.334rem) */
+    flex: 0 0 calc(33.333% - 1.334rem);
+    min-width: 220px;
+}
+
+/* En tablet: 2 tarjetas por fila */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .cuadricula-productos.clasicas-grid .tarjeta-producto {
+        flex: 0 0 calc(50% - 1rem);
+    }
+}
+
+/* En móvil: 1 tarjeta por fila, ancho completo */
+@media (max-width: 768px) {
+    .cuadricula-productos.clasicas-grid {
+        gap: 1.2rem;
+    }
+    .cuadricula-productos.clasicas-grid .tarjeta-producto {
+        flex: 0 0 100%;
+        min-width: unset;
+    }
+}
+
+/*CAJA DE LA TARTA*/
+
+/*Fondo y bordes para cada articulo de la tienda online*/
+.tarjeta-producto {
+    background: var(--color-fondo-seccion);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: var(--transicion);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-borde);
+}
+
+/*ANIMACION DE TARJETA*/
+
+/*Levantamos el producto hacia arriba para destacar la eleccion*/
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+}
+
+/*FOTOGRAFIA PRODUCTO*/
+
+/*Recorta la foto para que todas las tartas midan exactamente igual*/
+.tarjeta-producto img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/*DATOS DE PRODUCTO*/
+
+/*Alinea el boton y los textos en el pie de la tarjeta*/
+.info-producto {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/*NUMERO DE PRECIO*/
+
+/*Ponemos el valor del producto en grande y con color de marca*/
+.precio-producto {
+    font-size: 1.5rem;
+    color: var(--color-primario);
+    font-weight: bold;
+    margin: 1rem 0;
+    margin-top: auto;
+}
+
+/*CAJON DE DATOS*/
+
+/*Fondo generico usado en los formularios de iniciar sesion o contacto*/
+.caja-texto {
+    background: var(--color-fondo-seccion);
+    padding: 3rem;
+    border-radius: 10px;
+    margin: 2rem auto;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid var(--color-borde);
+    box-sizing: border-box;
+}
+
+/*BLOQUE DE FORMULARIO*/
+
+/*Mantiene un margen entre los diferentes huecos a rellenar*/
+.grupo-formulario {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+/*TITULO DE INPUT*/
+
+/*Letra en negrita para explicar que dato hay que escribir abajo*/
+.grupo-formulario label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--color-primario);
+}
+
+/*CAJA DE INGREDIENTES*/
+
+/*Formato para los checkboxes del creador de tartas*/
+.grupo-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--color-fondo);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+}
+
+/*PANTALLA DIVIDIDA*/
+
+/*Usado en contacto para poner un texto a un lado y la foto al otro*/
+.contacto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto 3rem auto;
+}
+
+/*OPINIONES DE CLIENTES*/
+
+/*Formato secundario para pintar las reseñas como tarjetitas cuadradas*/
+.resena-tarjeta {
+    background: var(--color-fondo-seccion);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-borde);
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/*CAJA DE ESCRITURA*/
+
+/*Estilos para las cajas de input donde el usuario escribe el texto*/
+.input-form {
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/*ESTIRAR AL LIMITE*/
+
+/*Clase util de css para obligar a un objeto a llenar la pantalla*/
+.ancho-total {
+    width: 100%;
+    box-sizing: border-box;
+}
+/* MAPA EN CONTACTO */
+#mapa-contacto {
+    height: 300px;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-borde);
+    z-index: 1;
+}
+
+/*ADAPTAR CONTACTOS*/
+
+/*Junta las dos columnas de contacto en una sola para los moviles*/
+@media (max-width: 992px) {
+    .contacto-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .caja-texto {
+        padding: 2rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — iPad Pro / Surface Pro (≤ 1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+    .cuadricula-productos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .seccion-hero {
+        min-height: 70vh;
+    }
+
+    .popup-promo {
+        max-width: 260px;
+        right: 10px;
+        top: 75px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — iPad Air / iPad Mini (≤ 820px)
+   ============================================================ */
+@media (max-width: 820px) {
+    .cuadricula-productos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+
+    .tarjeta-producto img {
+        height: 200px;
+    }
+
+    .titulo-seccion {
+        font-size: 2rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — Móviles grandes: Samsung S20, Pixel 7,
+   iPhone 14 Pro Max (≤ 430px a ≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+
+    /* Productos: 1 columna */
+    .cuadricula-productos {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .tarjeta-producto img {
+        height: 210px;
+    }
+
+    .info-producto {
+        padding: 1rem;
+    }
+
+    .precio-producto {
+        font-size: 1.3rem;
+    }
+
+    .titulo-seccion {
+        font-size: 1.8rem;
+        margin: 1.5rem 0 1rem;
+    }
+
+    /* Formularios */
+    .caja-texto {
+        padding: 1.5rem 1rem;
+        margin: 1rem auto;
+    }
+
+    .input-form {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    /* Popup: se baja al pie para no tapar contenido */
+    .popup-promo {
+        top: auto;
+        bottom: 80px;
+        right: 10px;
+        left: 10px;
+        max-width: 100%;
+    }
+
+    /* Contacto en columna */
+    .contacto-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    #mapa-contacto {
+        height: 220px;
+    }
+
+    /* Hero más compacto */
+    .seccion-hero {
+        min-height: 55vh;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — iPhone SE / Samsung S8+ (≤ 390px)
+   Pantallas más estrechas y compactas
+   ============================================================ */
+@media (max-width: 390px) {
+
+    .titulo-seccion {
+        font-size: 1.5rem;
+    }
+
+    .tarjeta-producto img {
+        height: 185px;
+    }
+
+    .caja-texto {
+        padding: 1rem 0.75rem;
+    }
+
+    .info-producto {
+        padding: 0.8rem;
+    }
+
+    .precio-producto {
+        font-size: 1.2rem;
+    }
+
+    /* Botones uno debajo del otro en pantallas muy estrechas */
+    .info-producto > div {
+        flex-direction: column !important;
+    }
+
+    .info-producto > div .boton {
+        width: 100%;
+        text-align: center;
+    }
+
+    .seccion-hero {
+        min-height: 50vh;
+    }
+}
+
+/* ============================================================
+   AJUSTES ESPECÍFICOS iOS Safari (WebKit)
+   ============================================================ */
+@supports (-webkit-touch-callout: none) {
+    /* Evita zoom automático en inputs — iOS lo fuerza si font-size < 16px */
+    .input-form,
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Safe area para notch / Dynamic Island */
+    header {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    .site-footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* ============================================================
+   ACCESIBILIDAD TÁCTIL — área mínima 44px (iOS HIG / Android)
+   ============================================================ */
+@media (pointer: coarse) {
+    .boton {
+        min-height: 44px;
+        padding: 0.7rem 1.5rem;
+    }
+
+    .btn-tema {
+        width: 44px;
+        height: 44px;
+    }
+
+    .flecha-carrusel {
+        width: 44px;
+        height: 44px;
+        line-height: 44px;
+    }
+
+    .menu-navegacion a {
+        padding: 0.4rem 0.2rem;
+    }
+
+    /* Dropdown táctil más fácil de pulsar */
+    .dropdown-contenido a {
+        padding: 14px 16px;
+    }
+}
